@@ -39,8 +39,22 @@
     </nav>
 
     <section class="hero">
-        <div class="photo-container">
-            <img src="assets/hero-1.jpg" alt="Sistema de purificación de agua profesional instalado" class="hero-photo">
+        <!-- Contenedor de fondos rotativos -->
+        <div class="photo-container" id="bg-slider">
+            <img src="assets/bg/bg1.JPG" class="hero-photo active">
+            <img src="assets/bg/bg2.JPG" class="hero-photo">
+            <img src="assets/bg/bg3.JPG" class="hero-photo">
+            <img src="assets/bg/bg4.JPG" class="hero-photo">
+            <img src="assets/bg/bg5.JPG" class="hero-photo">
+            <img src="assets/bg/bg6.JPG" class="hero-photo">
+            <img src="assets/bg/bg7.JPG" class="hero-photo">
+            <img src="assets/bg/bg8.JPG" class="hero-photo">
+            <img src="assets/bg/bg9.JPG" class="hero-photo">
+            <img src="assets/bg/bg10.JPG" class="hero-photo">
+            <img src="assets/bg/bg11.JPG" class="hero-photo">
+            <img src="assets/bg/bg12.JPG" class="hero-photo">
+            <img src="assets/bg/bg13.JPG" class="hero-photo">
+            <img src="assets/bg/bg14.JPG" class="hero-photo">
             <div class="overlay"></div>
         </div>
 
@@ -49,13 +63,10 @@
             
             <div class="logo-animation-container" data-aos="zoom-in" data-aos-duration="2000">
                 <img src="assets/logo.png" alt="AquaPure Logo" class="hero-logo-img">
-                <div class="shine-effect">
-                    <div class="shine-bar"></div>
-                </div>
             </div>
 
             <p class="hero-description">
-                Especialistas en purificación de agua. Analizamos tu agua y y te recomendamos la solución ideal para tu hogar segun tu necesidad. Tecnología avanzada, instalación profesional y sistemas respaldados con garantía, diseñados para brindarte agua limpia en cada punto de tu hogar a largo plazo.
+                Especialistas en purificación de agua. Analizamos tu agua y y te recomendamos la solución ideal para tu hogar segun tu necesidad. Tecnología avanzada, instalación profesional y sistemas respaldados con garantía.
             </p>
 
             <div class="hero-actions">
@@ -71,18 +82,49 @@
                 <svg class="service-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                 <h4 class="service-title">Ósmosis Inversa</h4>
                 <p class="service-text">Agua pura para beber directo del grifo. Elimina cloro, metales pesados y contaminantes invisibles.</p>
+                <div class="service-img-container">
+                    <img src="assets/osmosis.JPG" alt="Sistema Ósmosis" class="service-img">
+                </div>
             </div>
 
             <div class="service-card" data-aos="fade-up" data-aos-delay="200">
                 <svg class="service-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 <h4 class="service-title">AGUA DE CIUDAD</h4>
                 <p class="service-text">Protege tu piel, cabello y toda tu casa. Nuestro sistema elimina olores, sarro y residuos.</p>
+                <div class="service-img-container">
+                    <img src="assets/ciudad.JPG" alt="Sistema Ciudad" class="service-img">
+                </div>
             </div>
 
             <div class="service-card" data-aos="fade-up" data-aos-delay="400">
                 <svg class="service-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a2 2 0 00-1.96 1.414l-.727 2.903a2 2 0 01-3.566 0l-.727-2.903a2 2 0 00-1.96-1.414l-2.387.477a2 2 0 00-1.022.547l-2.12 2.12a2 2 0 01-2.828 0l-2.12-2.12a2 2 0 00-1.022-.547l-2.387-.477z"></path></svg>
                 <h4 class="service-title">AGUA DE POZO</h4>
                 <p class="service-text">Solución completa para agua con mal olor o color. Elimina azufre, bacterias y sedimentos.</p>
+                <div class="service-img-container">
+                    <img src="assets/pozo.JPG" alt="Sistema Pozo" class="service-img">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN DE REVIEWS -->
+    <section class="reviews-section">
+        <h2 class="reviews-title" data-aos="fade-down">Lo que dicen nuestros clientes</h2>
+        <div class="reviews-grid">
+            <div class="review-card" data-aos="zoom-in">
+                <div class="review-stars">★★★★★</div>
+                <p>"Excelente servicio y el cambio en el sabor del agua es increíble. Muy recomendados."</p>
+                <span class="review-author">- María G.</span>
+            </div>
+            <div class="review-card" data-aos="zoom-in" data-aos-delay="100">
+                <div class="review-stars">★★★★★</div>
+                <p>"Instalación súper limpia y profesional. Ya no tenemos problemas de sarro en las duchas."</p>
+                <span class="review-author">- Juan D.</span>
+            </div>
+            <div class="review-card" data-aos="zoom-in" data-aos-delay="200">
+                <div class="review-stars">★★★★★</div>
+                <p>"La mejor inversión para mi hogar. El equipo de Renew Florida resolvió todas mis dudas."</p>
+                <span class="review-author">- Carlos L.</span>
             </div>
         </div>
     </section>
@@ -94,6 +136,20 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init({ once: true });
+
+        // Script para el fondo rotativo
+        const slides = document.querySelectorAll('.hero-photo');
+        let currentSlide = 0;
+
+        function nextSlide() {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }
+
+        if(slides.length > 0) {
+            setInterval(nextSlide, 5000); // Cambia cada 5 segundos
+        }
     </script>
 </body>
 </html>
