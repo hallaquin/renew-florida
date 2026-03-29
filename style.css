@@ -176,3 +176,24 @@ body {
     .main-nav { top: 0; }
     .nav-link { display: none; }
 }
+
+/* Posicionamiento para las imágenes rotativas de servicios */
+.service-img-container {
+    position: relative; /* Necesario para el posicionamiento absoluto de los hijos */
+    height: 300px;
+}
+
+.service-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.service-img.active {
+    opacity: 1;
+}
