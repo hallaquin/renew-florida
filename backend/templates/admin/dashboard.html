@@ -1,0 +1,44 @@
+{% extends "admin/base.html" %}
+{% block title %}Aplicaciones de Crédito{% endblock %}
+{% block content %}
+<h1 class="page-title">Aplicaciones de Crédito</h1>
+
+<div class="filters">
+    <a class="filter-pill {% if not status_filter %}active{% endif %}" href="{{ url_for('admin.dashboard') }}">Todas</a>
+    {% for option in status_options %}
+        <a class="filter-pill {% if status_filter == option %}active{% endif %}"
+           href="{{ url_for('admin.dashboard', status=option) }}">{{ option|capitalize }}</a>
+    {% endfor %}
+</div>
+
+{% if rows %}
+<div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Fecha</th>
+                <th>Aplicante</th>
+                <th>Teléfono</th>
+                <th>Email</th>
+                <th>Estatus</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+            <tr onclick="window.location='{{ url_for('admin.detail', app_id=row.id) }}'" style="cursor:pointer;">
+                <td>{{ row.id }}</td>
+                <td>{{ row.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td>{{ row.full_name }}</td>
+                <td>{{ row.phone }}</td>
+                <td>{{ row.email }}</td>
+                <td><span class="status-badge status-{{ row.status }}">{{ row.status }}</span></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="empty-state">Todavía no hay aplicaciones{% if status_filter %} con estatus "{{ status_filter }}"{% endif %}.</div>
+{% endif %}
+{% endblock %}

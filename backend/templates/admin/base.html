@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Panel Admin{% endblock %} · Renew Florida</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
+</head>
+<body>
+{% if session.get('admin_id') %}
+<header class="admin-header">
+    <div class="admin-header-inner">
+        <span class="admin-brand">Renew Florida · Admin</span>
+        <nav>
+            <a href="{{ url_for('admin.dashboard') }}">Aplicaciones</a>
+            <a href="{{ url_for('admin.export_csv') }}">Exportar CSV</a>
+            <a href="{{ url_for('admin.logout') }}">Salir ({{ session.get('admin_username') }})</a>
+        </nav>
+    </div>
+</header>
+{% endif %}
+<main class="admin-main">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="admin-flash">
+                {% for message in messages %}<p>{{ message }}</p>{% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+</main>
+</body>
+</html>

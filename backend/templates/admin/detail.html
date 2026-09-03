@@ -1,0 +1,116 @@
+{% extends "admin/base.html" %}
+{% block title %}Aplicación #{{ record.id }}{% endblock %}
+{% block content %}
+<a class="back-link" href="{{ url_for('admin.dashboard') }}">&larr; Volver al listado</a>
+
+<div class="detail-header">
+    <div>
+        <h1 class="page-title" style="margin-bottom:0.25rem;">Aplicación #{{ record.id }}</h1>
+        <div style="color:var(--text-gray); font-size:0.85rem;">
+            Recibida el {{ record.created_at.strftime('%Y-%m-%d %H:%M') }}
+        </div>
+    </div>
+    <form class="status-form" method="post" action="{{ url_for('admin.update_status', app_id=record.id) }}">
+        <select name="status">
+            {% for option in status_options %}
+                <option value="{{ option }}" {% if option == record.status %}selected{% endif %}>{{ option|capitalize }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn">Actualizar estatus</button>
+    </form>
+</div>
+
+<div class="section-card">
+    <h2>Aplicante Principal</h2>
+    <div class="kv-grid">
+        <div class="kv-item"><div class="kv-label">Nombre completo</div><div class="kv-value">{{ data.applicant.fullName }}</div></div>
+        <div class="kv-item"><div class="kv-label">Fecha de nacimiento</div><div class="kv-value">{{ data.applicant.dateOfBirth }}</div></div>
+        <div class="kv-item">
+            <div class="kv-label">Seguro Social</div>
+            <div class="kv-value ssn-row">
+                <span id="ssn-applicant">•••-••-••••</span>
+                <button type="button" class="btn btn-secondary" onclick="revealSsn()">Revelar</button>
+            </div>
+        </div>
+        <div class="kv-item"><div class="kv-label">Monto solicitado</div><div class="kv-value">{{ data.applicant.amount }}</div></div>
+        <div class="kv-item"><div class="kv-label">Teléfono</div><div class="kv-value">{{ data.applicant.phone }}</div></div>
+        <div class="kv-item"><div class="kv-label">Email</div><div class="kv-value">{{ data.applicant.email }}</div></div>
+        <div class="kv-item"><div class="kv-label">Dirección</div><div class="kv-value">{{ data.applicant.address }}</div></div>
+        <div class="kv-item"><div class="kv-label">Tiempo viviendo ahí</div><div class="kv-value">{{ data.applicant.timeLivingAtAddress }}</div></div>
+        <div class="kv-item"><div class="kv-label">Hipoteca / Renta mensual</div><div class="kv-value">{{ data.applicant.monthlyMortgageOrRent }}</div></div>
+        <div class="kv-item"><div class="kv-label">Tipo de vivienda</div><div class="kv-value">{{ data.applicant.housingType }}</div></div>
+        <div class="kv-item"><div class="kv-label">Estatus de vivienda</div><div class="kv-value">{{ data.applicant.housingStatus }}</div></div>
+        <div class="kv-item"><div class="kv-label">Licencia de conducir</div><div class="kv-value">{{ data.applicant.driversLicense.number }} ({{ data.applicant.driversLicense.state }})</div></div>
+        <div class="kv-item"><div class="kv-label">Expedición / Expiración</div><div class="kv-value">{{ data.applicant.driversLicense.issueDate }} — {{ data.applicant.driversLicense.expDate }}</div></div>
+    </div>
+    <div class="files-row">
+        {% if record.id_photo_path %}<a class="btn btn-secondary" href="{{ url_for('admin.id_photo', app_id=record.id) }}" target="_blank">Ver foto de ID</a>{% endif %}
+        {% if record.signature_applicant_path %}<a class="btn btn-secondary" href="{{ url_for('admin.signature', app_id=record.id, which='applicant') }}" target="_blank">Ver firma</a>{% endif %}
+    </div>
+</div>
+
+{% if data.coApplicant %}
+<div class="section-card">
+    <h2>Co-Aplicante</h2>
+    <div class="kv-grid">
+        <div class="kv-item"><div class="kv-label">Nombre completo</div><div class="kv-value">{{ data.coApplicant.fullName }}</div></div>
+        <div class="kv-item"><div class="kv-label">Fecha de nacimiento</div><div class="kv-value">{{ data.coApplicant.dateOfBirth }}</div></div>
+        <div class="kv-item">
+            <div class="kv-label">Seguro Social</div>
+            <div class="kv-value ssn-row"><span id="ssn-coapplicant">•••-••-••••</span></div>
+        </div>
+        <div class="kv-item"><div class="kv-label">Teléfono</div><div class="kv-value">{{ data.coApplicant.phone }}</div></div>
+        <div class="kv-item"><div class="kv-label">Email</div><div class="kv-value">{{ data.coApplicant.email }}</div></div>
+        <div class="kv-item"><div class="kv-label">Dirección</div><div class="kv-value">{{ data.coApplicant.address }}</div></div>
+        <div class="kv-item"><div class="kv-label">Licencia de conducir</div><div class="kv-value">{{ data.coApplicant.driversLicense.number }} ({{ data.coApplicant.driversLicense.state }})</div></div>
+    </div>
+    {% if record.signature_coapplicant_path %}
+    <div class="files-row">
+        <a class="btn btn-secondary" href="{{ url_for('admin.signature', app_id=record.id, which='coapplicant') }}" target="_blank">Ver firma co-aplicante</a>
+    </div>
+    {% endif %}
+</div>
+{% endif %}
+
+<div class="section-card">
+    <h2>Empleo e Ingresos — Aplicante</h2>
+    <div class="kv-grid">
+        <div class="kv-item"><div class="kv-label">Tipo de ingreso</div><div class="kv-value">{{ data.employment.applicant.incomeType }}</div></div>
+        <div class="kv-item"><div class="kv-label">Empleador</div><div class="kv-value">{{ data.employment.applicant.employerName }}</div></div>
+        <div class="kv-item"><div class="kv-label">Teléfono del trabajo</div><div class="kv-value">{{ data.employment.applicant.workPhone }}</div></div>
+        <div class="kv-item"><div class="kv-label">Posición / Rol</div><div class="kv-value">{{ data.employment.applicant.role }}</div></div>
+        <div class="kv-item"><div class="kv-label">Tiempo en el trabajo</div><div class="kv-value">{{ data.employment.applicant.timeOnJob }}</div></div>
+        <div class="kv-item"><div class="kv-label">Ingreso</div><div class="kv-value">{{ data.employment.applicant.monthlyIncome }} ({{ data.employment.applicant.incomeFrequency }})</div></div>
+    </div>
+</div>
+
+{% if data.employment.coApplicant %}
+<div class="section-card">
+    <h2>Empleo e Ingresos — Co-Aplicante</h2>
+    <div class="kv-grid">
+        <div class="kv-item"><div class="kv-label">Tipo de ingreso</div><div class="kv-value">{{ data.employment.coApplicant.incomeType }}</div></div>
+        <div class="kv-item"><div class="kv-label">Empleador</div><div class="kv-value">{{ data.employment.coApplicant.employerName }}</div></div>
+        <div class="kv-item"><div class="kv-label">Posición / Rol</div><div class="kv-value">{{ data.employment.coApplicant.role }}</div></div>
+        <div class="kv-item"><div class="kv-label">Ingreso</div><div class="kv-value">{{ data.employment.coApplicant.monthlyIncome }} ({{ data.employment.coApplicant.incomeFrequency }})</div></div>
+    </div>
+</div>
+{% endif %}
+
+<div class="section-card">
+    <h2>Representante de Ventas</h2>
+    <div class="kv-grid">
+        <div class="kv-item"><div class="kv-label">Nombre</div><div class="kv-value">{{ data.dealer.repName }}</div></div>
+    </div>
+</div>
+
+<script>
+async function revealSsn() {
+    const res = await fetch("{{ url_for('admin.reveal_ssn', app_id=record.id) }}", { method: 'POST' });
+    if (!res.ok) return;
+    const body = await res.json();
+    document.getElementById('ssn-applicant').textContent = body.ssn || '(sin dato)';
+    const coEl = document.getElementById('ssn-coapplicant');
+    if (coEl) coEl.textContent = body.coSsn || '(sin dato)';
+}
+</script>
+{% endblock %}

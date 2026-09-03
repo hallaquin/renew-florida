@@ -1,1 +1,4 @@
 .project.text
+.venv/
+__pycache__/
+*.pyc
