@@ -33,8 +33,15 @@ def create_app() -> Flask:
     db.init_app(app)
     limiter.init_app(app)
 
-    allowed_origin = os.environ.get("CORS_ALLOWED_ORIGIN", "*")
-    CORS(app, resources={r"/api/*": {"origins": allowed_origin}})
+    # Admite uno o varios orígenes separados por coma, p. ej.:
+    # "https://www.renewflorida.us,https://renewflorida.us"
+    allowed_origins_raw = os.environ.get("CORS_ALLOWED_ORIGIN", "*")
+    allowed_origins = (
+        [origin.strip() for origin in allowed_origins_raw.split(",") if origin.strip()]
+        if allowed_origins_raw != "*"
+        else "*"
+    )
+    CORS(app, resources={r"/api/*": {"origins": allowed_origins}})
 
     app.register_blueprint(api_bp)
     app.register_blueprint(admin_bp)
