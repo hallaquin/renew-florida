@@ -3,4 +3,4 @@
 // En producción, reemplaza esto con la URL pública del servicio (Railway/Render) una vez desplegado.
 const API_BASE_URL = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
     ? "http://localhost:5000"
-    : "https://REEMPLAZAR-CON-TU-BACKEND.up.railway.app";
+    : "https://renew-florida-production.up.railway.app";
