@@ -8,22 +8,21 @@ from backend.extensions import db, limiter
 from backend.routes_admin import admin_bp
 from backend.routes_api import api_bp
 
-BASE_DIR = Path(__file__).resolve().parent
-
-
 def create_app() -> Flask:
     app = Flask(__name__, static_folder="static", template_folder="templates")
 
     app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-only-change-me")
 
-    db_path = BASE_DIR / "data" / "renew_florida.db"
+    data_dir = Path(os.environ.get("DATA_DIR", "/data"))
+
+    db_path = data_dir / "renew_florida.db"
     db_path.parent.mkdir(parents=True, exist_ok=True)
     app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
         "DATABASE_URL", f"sqlite:///{db_path}"
     )
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-    upload_dir = BASE_DIR / "uploads"
+    upload_dir = data_dir / "uploads"
     upload_dir.mkdir(parents=True, exist_ok=True)
     app.config["UPLOAD_DIR"] = str(upload_dir)
 
